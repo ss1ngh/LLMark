@@ -1,0 +1,47 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+node_modules
+.pnpm-store
+
+# Build output
+dist
+dist-ssr
+build
+out
+
+# Local environmental variables
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing
+coverage
+.nyc_output
+
+# Chrome Extension specific
+*.pem
+.crx
+
+# OS specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini

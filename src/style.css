@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Force specific fonts to prevent inheritance from the host page */
+#llmark-root {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+}
