@@ -16,7 +16,7 @@ export default defineManifest({
                 'https://chatgpt.com/*',
                 'https://claude.ai/*',
                 'https://www.perplexity.ai/*',
-                'https://www.wikipedia.org/*',
+                'https://en.wikipedia.org/*',
                 'https://www.grok.com/*'
             ],
             js: ['src/content/index.tsx'],
