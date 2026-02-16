@@ -6,8 +6,14 @@ export default defineManifest({
     version: '1.0.0',
     manifest_version: 3,
     permissions: ['storage', 'activeTab', 'scripting', 'alarms'],
+    icons: {
+        16: 'favicon-96x96.png',
+        48: 'favicon-96x96.png',
+        128: 'web-app-manifest-192x192.png',
+    },
     action: {
         default_title: 'LLMark',
+        default_icon: 'favicon-96x96.png',
     },
     content_scripts: [
         {
