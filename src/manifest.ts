@@ -22,6 +22,12 @@ export default defineManifest({
             js: ['src/content/index.tsx'],
         },
     ],
+    web_accessible_resources: [
+        {
+            resources: ['bookmark.svg'],
+            matches: ['<all_urls>'],
+        },
+    ],
     background: {
         service_worker: 'src/background/index.ts',
         type: 'module',
