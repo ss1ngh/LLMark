@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Save, Trash2 } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipArrow,
+} from '../components/ui/tooltip';
 
 interface BookmarkData {
   id: number;
@@ -18,7 +25,6 @@ const COLORS = [
   '#118AB2', '#073B4C', '#9D4EDD', '#2EC4B6', '#F15BB5', '#9EF01A',
 ];
 
-// --- 1. ROBUST SCROLL CONTAINER FINDER ---
 const getMainScrollContainer = (): HTMLElement | Window => {
   if (window.scrollY > 0) return window;
 
@@ -57,7 +63,7 @@ const getMainScrollContainer = (): HTMLElement | Window => {
   return largestScrollable || window;
 };
 
-// --- 2. IMPROVED CONTEXT FINDER (ChatGPT/Claude Aware) ---
+//improved context finder (ChatGPT/Claude)
 const getAnchorContext = (): { anchor: HTMLElement, pre: string, post: string } | null => {
   const selectors = [
     '.markdown p', '.markdown li', '.markdown h3', '.markdown pre',
@@ -116,7 +122,7 @@ const LLMarkApp = () => {
   const [editValue, setEditValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Function to load bookmarks for the CURRENT URL
+  //load bookmarks for the CURRENT URL
   const loadCurrentBookmarks = () => {
     if (typeof chrome !== 'undefined' && chrome.storage) {
       chrome.storage.local.get(['llmarks'], (result) => {
@@ -128,12 +134,11 @@ const LLMarkApp = () => {
     }
   };
 
-  // --- NEW: URL OBSERVER ---
   useEffect(() => {
     // Initial load
     loadCurrentBookmarks();
 
-    // Listen for URL changes in SPAs
+    //listen for URL changes in SPAs
     let lastUrl = window.location.href;
     const observer = new MutationObserver(() => {
       const currentUrl = window.location.href;
@@ -345,10 +350,13 @@ const LLMarkApp = () => {
                         onKeyDown={(e) => handleKeyDown(e, bm.id)}
                         onKeyUp={(e) => e.stopPropagation()}
                         onKeyPress={(e) => e.stopPropagation()}
-                        className="bg-transparent text-gray-900 placeholder-gray-400 text-[11px] font-medium border-b border-gray-300 focus:border-gray-900 focus:outline-none w-full h-6 px-1 transition-all"
+                        className="bg-transparent text-gray-900 placeholder-gray-400 text-[11px] font-medium border-b border-gray-300 focus:border-gray-900 focus:outline-none flex-1 h-6 px-1 transition-all min-w-0"
                         placeholder="Label..."
                       />
-                      <button onClick={(e) => { e.stopPropagation(); saveTitle(bm.id); }} className="p-1 hover:bg-gray-200 rounded text-gray-700 transition-colors"><Save size={12} /></button>
+                      <div className="flex items-center gap-1">
+                        <button onClick={(e) => { e.stopPropagation(); deleteBookmark(bm.id); }} className="p-1 hover:bg-red-50 hover:text-red-500 rounded text-gray-400 transition-colors"><Trash2 size={12} /></button>
+                        <button onClick={(e) => { e.stopPropagation(); saveTitle(bm.id); }} className="p-1 hover:bg-gray-100 rounded text-gray-700 transition-colors"><Save size={12} /></button>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex-1 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75 overflow-hidden">
@@ -363,9 +371,19 @@ const LLMarkApp = () => {
         </div>
       </div>
       <div className="fixed bottom-8 right-8 z-[9999]">
-        <button onClick={handleCapture} className="group flex items-center justify-center w-12 h-12 bg-white rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-gray-200">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-        </button>
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button onClick={handleCapture} className="flex items-center justify-center w-8 h-8 bg-white rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-gray-200">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3730A3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="left" className="mr-2">
+              <p>LLMark</p>
+              <TooltipArrow />
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
